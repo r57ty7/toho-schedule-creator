@@ -36,6 +36,10 @@ function searchTohoEmail(): GoogleAppsScript.Gmail.GmailMessage[] {
   return messages
 }
 
+/**
+ * トリガーを作成する
+ * デフォルトだと日毎に実行される
+ */
 function creatTrigger() {
   ScriptApp.newTrigger('createTohoSchedule')
     .timeBased()
