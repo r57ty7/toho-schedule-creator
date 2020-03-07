@@ -1,4 +1,4 @@
-import Movie from './Movie'
+import Movie from './movie'
 
 function createTohoSchedule() {
   const calendar = CalendarApp.getDefaultCalendar()
