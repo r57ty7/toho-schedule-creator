@@ -1,11 +1,13 @@
-import Movie from './Movie'
+import { searchTohoEmail, createFromEmailBody } from './Email'
 
 function createTohoSchedule() {
   const calendar = CalendarApp.getDefaultCalendar()
-  const messages = searchTohoEmail()
-  for (let message of messages) {
+  const date = new Date()
+  date.setDate(date.getDate() - 7)
+  const messages = searchTohoEmail(date)
+  for (const message of messages) {
     const body = message.getPlainBody()
-    const movie = Movie.createFromEmailBody(body)
+    const movie = createFromEmailBody(body)
 
     const startDateTime = new Date(`${movie.movieDate} ${movie.movieTime}:00`)
     const endDateTime = new Date(`${movie.movieDate} ${movie.movieTime}:00`)
@@ -23,17 +25,6 @@ function createTohoSchedule() {
       Logger.log('Already registered. (count:' + movieEvents.length + ') (' + movieEvents[0].getTitle() + ')')
     }
   }
-}
-
-function searchTohoEmail(): GoogleAppsScript.Gmail.GmailMessage[] {
-  const from = 'from:i-net.ticket@ml.tohotheater.jp'
-  const subject = 'subject:"Notice of Internet Ticket Purchase Completion"'
-  const threads = GmailApp.search(`${from} ${subject}`)
-  const messages: GoogleAppsScript.Gmail.GmailMessage[] = []
-  for (let thread of threads) {
-    thread.getMessages().forEach(message => messages.push(message))
-  }
-  return messages
 }
 
 /**
