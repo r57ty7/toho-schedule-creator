@@ -1,9 +1,9 @@
 export default interface Movie {
   confirmationNumber: string
   theater: string
-  totalPrice: string
+  totalPrice: number
   seatNumber: string
-  movieDate: string
-  movieTime: string
+  startTime: Date
+  endTime: Date
   movieTitle: string
 }
