@@ -1,4 +1,4 @@
-import { searchTohoEmail, createFromEmailBody } from './Email'
+import { searchTohoEmail, createMovieFromEmailBody } from './Email'
 
 function createTohoSchedule() {
   const calendar = CalendarApp.getDefaultCalendar()
@@ -7,16 +7,11 @@ function createTohoSchedule() {
   const messages = searchTohoEmail(date)
   for (const message of messages) {
     const body = message.getPlainBody()
-    const movie = createFromEmailBody(body)
+    const movie = createMovieFromEmailBody(body)
 
-    const startDateTime = new Date(`${movie.movieDate} ${movie.movieTime}:00`)
-    const endDateTime = new Date(`${movie.movieDate} ${movie.movieTime}:00`)
-    // 3時間に設定
-    endDateTime.setHours(endDateTime.getHours() + 3)
-
-    const movieEvents = calendar.getEvents(startDateTime, endDateTime, { search: `[${movie.confirmationNumber}] ${movie.movieTitle}` })
+    const movieEvents = calendar.getEvents(movie.startTime, movie.endTime, { search: `[${movie.confirmationNumber}] ${movie.movieTitle}` })
     if (movieEvents.length == 0) {
-      const event = calendar.createEvent(`[${movie.confirmationNumber}] ${movie.movieTitle}`, startDateTime, endDateTime, {
+      const event = calendar.createEvent(`[${movie.confirmationNumber}] ${movie.movieTitle}`, movie.startTime, movie.endTime, {
         description: body,
         location: movie.theater,
       })
