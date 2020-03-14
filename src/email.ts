@@ -13,7 +13,11 @@ export function searchTohoEmail(fromDate: Date): GoogleAppsScript.Gmail.GmailMes
   return messages
 }
 
-export function createMovieFromEmailBody(body: string): Movie {
+export function createMovieFromEmailBody(body: string): Movie | null {
+  if (body.match(/購入番号\s*(\d{4}).*/) == null) {
+    return null
+  }
+
   const confirmationNumber = body.match(/購入番号\s*(\d{4}).*/)[1]
   const theater = body.match(/映画館\s*(\S+).*/)[1]
   const totalPrice = parseInt(body.match(/合計金額\s*([0-9,]+).*/)[1].replace(',', ''))

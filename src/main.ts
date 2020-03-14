@@ -1,4 +1,5 @@
 import { searchTohoEmail, createMovieFromEmailBody } from './Email'
+import Movie from './movie'
 
 function createTohoSchedule() {
   const calendar = CalendarApp.getDefaultCalendar()
@@ -9,17 +10,25 @@ function createTohoSchedule() {
     const body = message.getPlainBody()
     const movie = createMovieFromEmailBody(body)
 
-    const movieEvents = calendar.getEvents(movie.startTime, movie.endTime, { search: `[${movie.confirmationNumber}] ${movie.movieTitle}` })
-    if (movieEvents.length == 0) {
-      const event = calendar.createEvent(`[${movie.confirmationNumber}] ${movie.movieTitle}`, movie.startTime, movie.endTime, {
-        description: body,
-        location: movie.theater,
-      })
-      Logger.log('Calendar Registered: ' + event.getId())
-    } else {
-      Logger.log('Already registered. (count:' + movieEvents.length + ') (' + movieEvents[0].getTitle() + ')')
-    }
+    createEventIfNotExist(calendar, movie)
   }
+}
+
+function createEventIfNotExist(calendar: GoogleAppsScript.Calendar.Calendar, movie?: Movie) {
+  if (movie == null) {
+    return
+  }
+
+  const movieEvents = calendar.getEvents(movie.startTime, movie.endTime, { search: `[${movie.confirmationNumber}] ${movie.movieTitle}` })
+  if (movieEvents.length >= 0) {
+    Logger.log('Already registered. (count:' + movieEvents.length + ') (' + movieEvents[0].getTitle() + ')')
+    return
+  }
+
+  const event = calendar.createEvent(`[${movie.confirmationNumber}] ${movie.movieTitle} (${movie.seatNumber})`, movie.startTime, movie.endTime, {
+    location: movie.theater,
+  })
+  Logger.log('Calendar Registered: ' + event.getId())
 }
 
 /**
