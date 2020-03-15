@@ -1,5 +1,7 @@
 {
   "scripts": {
+    "push": "clasp push",
+    "watch": "clasp push --watch",
     "test": "jest"
   },
   "devDependencies": {
