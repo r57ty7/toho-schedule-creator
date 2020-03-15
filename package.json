@@ -17,7 +17,8 @@
     "globals": {
       "ts-jest": {
         "tsConfig": "tsconfig.json"
-      }
+      },
+      "GmailApp": {}
     },
     "testMatch": [
       "**/*.test.ts"
