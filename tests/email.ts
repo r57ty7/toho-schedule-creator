@@ -1,5 +1,5 @@
-import { searchTohoEmail, createMovieFromEmailBody } from './Email'
-import Movie from './movie'
+import { searchTohoEmail, createMovieFromEmailBody } from '../src/Email'
+import Movie from '../src/movie'
 
 class GmailThread {
   message: GmailMessage

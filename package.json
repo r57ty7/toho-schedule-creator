@@ -23,7 +23,7 @@
       "GmailApp": {}
     },
     "testMatch": [
-      "**/*.test.ts"
+      "<rootDir>/tests/*.ts"
     ]
   }
 }
