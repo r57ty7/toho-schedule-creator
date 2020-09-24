@@ -6,6 +6,7 @@ function createTohoSchedule() {
   const date = new Date()
   date.setDate(date.getDate() - 7)
   const messages = searchTohoEmail(date)
+  console.log(`Emails: ${messages}`)
   for (const message of messages) {
     const body = message.getPlainBody()
     const movie = createMovieFromEmailBody(body)
@@ -20,7 +21,7 @@ function createEventIfNotExist(calendar: GoogleAppsScript.Calendar.Calendar, mov
   }
 
   const movieEvents = calendar.getEvents(movie.startTime, movie.endTime, { search: `[${movie.confirmationNumber}] ${movie.movieTitle}` })
-  if (movieEvents.length >= 0) {
+  if (movieEvents.length > 0) {
     Logger.log('Already registered. (count:' + movieEvents.length + ') (' + movieEvents[0].getTitle() + ')')
     return
   }
@@ -36,8 +37,5 @@ function createEventIfNotExist(calendar: GoogleAppsScript.Calendar.Calendar, mov
  * デフォルトだと日毎に実行される
  */
 function creatTrigger() {
-  ScriptApp.newTrigger('createTohoSchedule')
-    .timeBased()
-    .everyDays(1)
-    .create()
+  ScriptApp.newTrigger('createTohoSchedule').timeBased().everyHours(1).create()
 }
